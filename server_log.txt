@@ -1,0 +1,189 @@
+
+----------
+Loaded log file: "server_log.txt".
+----------
+
+SA-MP Dedicated Server
+----------------------
+v0.3.7-R2, (C)2005-2015 SA-MP Team
+
+[16:48:32] 
+[16:48:32] Server Plugins
+[16:48:32] --------------
+[16:48:32]  Loaded 0 plugins.
+
+[16:48:32] 
+[16:48:32] Filterscripts
+[16:48:32] ---------------
+[16:48:32]   Loading filterscript 'Zadmin3.3betaWFM.amx'...
+[16:48:32] - System Configuration options loaded.
+[16:48:32] - COMMANDS LEVELS: Configuration has been created in 'CmdsLevels.ini'
+[16:48:32] - Admin Commands Levels loaded.
+[16:48:32] - ANTI SWEAR: 0 forbidden words loaded.
+[16:48:32] - ANTI BAD NAMES: 0 forbidden parts of name loaded.
+[16:48:32] *** 'Zadmin v3.3' Loading completed.
+[16:48:32] 
+*************************************
+[16:48:32] *            [FS]Zadmin             *
+[16:48:32] *               v3.3                *
+[16:48:32] *    Special Version for WFM 3.0    *
+[16:48:32] *              Loaded.              *
+[16:48:32] *            By [ZFM]Zuc            *
+[16:48:32] *************************************
+
+[16:48:32]   Loading filterscript 'StreamerFreeroam.amx'...
+[16:48:32] - Streamer world FREEROAM loaded.
+[16:48:33]   Loading filterscript 'StreamerArea51.amx'...
+[16:48:33] - Streamer world AREA51 loaded.
+[16:48:33]   Loading filterscript 'StreamerWar.amx'...
+[16:48:33] - Streamer world WAR loaded.
+[16:48:33]   Loading filterscript 'StreamerDm.amx'...
+[16:48:33] - Streamer world GANGS_WAR loaded.
+[16:48:33]   Loaded 5 filterscripts.
+
+[16:48:33] 
+-------- Freeroam World Config: --------
+[16:48:33] - Auto Fix: 1;
+- Unlimited Nitro: 1;
+- Allowed Nitro In Races: 1;
+- Freeze On End Race: 0;
+- Stop Race Joining: 15 sec;
+- Race Car Destroy after: 30 sec;
+[16:48:33] 
+---------- Ship World Config: ----------
+[16:48:33] - Round Finish: 5 minutes;
+- Bomb Countdown: 30 seconds;
+[16:48:33] 
+---------- War World Config: -----------
+[16:48:33] - Nations Zones: Big;
+[16:48:33] ----------------------------------------
+
+[16:48:33] 
+***********************
+[16:48:33]      ZFree Mode WFM     
+[16:48:33]    By [ZFM]Zuc (v3.1)   
+[16:48:33] ***********************
+
+[16:48:33] Number of vehicle models: 51
+[16:48:48] --- Server Shutting Down.
+[16:48:48] 
+**************************************
+[16:48:48] *     ---===  [FS]Zadmin  ===---     *
+[16:48:48] *                v3.3                *
+[16:48:48] *             Unloaded.              *
+[16:48:48] *************************************
+
+
+----------
+Loaded log file: "server_log.txt".
+----------
+
+SA-MP Dedicated Server
+----------------------
+v0.3.7-R2, (C)2005-2015 SA-MP Team
+
+[16:50:02] 
+[16:50:02] Server Plugins
+[16:50:02] --------------
+[16:50:02]  Loaded 0 plugins.
+
+[16:50:02] 
+[16:50:02] Filterscripts
+[16:50:02] ---------------
+[16:50:02]   Loading filterscript 'Zadmin3.3betaWFM.amx'...
+[16:50:02] - Admin Cmds activation options loaded.
+[16:50:02] - System Configuration options loaded.
+[16:50:02] - Admin Commands Levels loaded.
+[16:50:02] - ANTI SWEAR: 0 forbidden words loaded.
+[16:50:02] - ANTI BAD NAMES: 0 forbidden parts of name loaded.
+[16:50:02] *** 'Zadmin v3.3' Loading completed.
+[16:50:02] 
+*************************************
+[16:50:02] *            [FS]Zadmin             *
+[16:50:02] *               v3.3                *
+[16:50:02] *    Special Version for WFM 3.0    *
+[16:50:02] *              Loaded.              *
+[16:50:02] *            By [ZFM]Zuc            *
+[16:50:02] *************************************
+
+[16:50:02]   Loading filterscript 'StreamerFreeroam.amx'...
+[16:50:02] - Streamer world FREEROAM loaded.
+[16:50:03]   Loading filterscript 'StreamerArea51.amx'...
+[16:50:03] - Streamer world AREA51 loaded.
+[16:50:03]   Loading filterscript 'StreamerWar.amx'...
+[16:50:03] - Streamer world WAR loaded.
+[16:50:03]   Loading filterscript 'StreamerDm.amx'...
+[16:50:03] - Streamer world GANGS_WAR loaded.
+[16:50:03]   Loaded 5 filterscripts.
+
+[16:50:03] 
+-------- Freeroam World Config: --------
+[16:50:03] - Auto Fix: 1;
+- Unlimited Nitro: 1;
+- Allowed Nitro In Races: 1;
+- Freeze On End Race: 0;
+- Stop Race Joining: 15 sec;
+- Race Car Destroy after: 30 sec;
+[16:50:03] 
+---------- Ship World Config: ----------
+[16:50:03] - Round Finish: 5 minutes;
+- Bomb Countdown: 30 seconds;
+[16:50:03] 
+---------- War World Config: -----------
+[16:50:03] - Nations Zones: Big;
+[16:50:03] ----------------------------------------
+
+[16:50:03] 
+***********************
+[16:50:03]      ZFree Mode WFM     
+[16:50:03]    By [ZFM]Zuc (v3.1)   
+[16:50:03] ***********************
+
+[16:50:03] Number of vehicle models: 51
+[16:51:04] [connection] 192.168.1.111:1983 requests connection cookie.
+[16:51:05] [connection] incoming connection: 192.168.1.111:1983 id: 0
+[16:51:05] [join] Brian_Welback has joined the server (0:192.168.1.111)
+[16:51:05] * Brian_Welback (0) has joined the server *
+[16:51:05] +++++ [JOIN]: Brian_Welback (id:0) has joined in server. +++++
+[16:51:07] --- Brian_Welback has joined in World FREEROAM
+[16:51:16] *-_-* "Brian_Welback"(id: 0) typed "/register brian111"
+[16:51:16] <<<< Brian_Welback registered [password brian111] >>>>
+[16:51:20] *-_-* "Brian_Welback"(id: 0) typed "/login brian111"
+[16:51:20] Brian_Welback (0) logged in with password brian111
+[16:54:12] *-_-* "Brian_Welback"(id: 0) typed "/command"
+[16:54:14] *-_-* "Brian_Welback"(id: 0) typed "/command"
+[16:54:18] *-_-* "Brian_Welback"(id: 0) typed "/command"
+[16:56:36] *-_-* "Brian_Welback"(id: 0) typed "/cmd"
+[16:56:48] *-_-* "Brian_Welback"(id: 0) typed "/allcmd"
+[16:56:57] *-_-* "Brian_Welback"(id: 0) typed "/due;"
+[16:56:59] *-_-* "Brian_Welback"(id: 0) typed "/duel"
+[16:57:04] *-_-* "Brian_Welback"(id: 0) typed "/weapons"
+[17:04:57] *-_-* "Brian_Welback"(id: 0) typed "/changeworld"
+[17:04:58] --- Brian_Welback has joined in World GANGS_WAR
+[17:04:58] [death] Brian_Welback died 255
+[17:07:27] *-_-* "Brian_Welback"(id: 0) typed "/stats]"
+[17:07:29] *-_-* "Brian_Welback"(id: 0) typed "/stats"
+[17:07:29] Brian_Welback (0) checked his stats
+[17:07:44] *-_-* "Brian_Welback"(id: 0) typed "/changeworld"
+[17:07:45] --- Brian_Welback has joined in World FREEROAM
+[17:07:45] [death] Brian_Welback died 255
+[17:07:52] *-_-* "Brian_Welback"(id: 0) typed "/stats"
+[17:07:52] Brian_Welback (0) checked his stats
+[17:15:55] *-_-* "Brian_Welback"(id: 0) typed "/credits"
+[17:31:29] RCON (In-Game): Player #0 (Brian_Welback) has logged in.
+[17:31:32] RCON: Brian_Welback has completely logged in as RCON Admin.
+[17:31:36] *-_-* "Brian_Welback"(id: 0) typed "/makeadmin"
+[17:31:39] *-_-* "Brian_Welback"(id: 0) typed "/makeadmin0 10"
+[17:31:41] *-_-* "Brian_Welback"(id: 0) typed "/makeadmin 0 10"
+[17:31:47] *-_-* "Brian_Welback"(id: 0) typed "/makeadmin 0 8"
+[17:31:50] * [EXIT]: Brian_Welback has left the server. *
+[17:31:50] +++++ [LEFT]: Brian_Welback (id:0) has left the server. +++++
+[17:31:50] [part] Brian_Welback has left the server (0:1)
+[17:31:57] --- Server Shutting Down.
+[17:31:57] 
+**************************************
+[17:31:57] *     ---===  [FS]Zadmin  ===---     *
+[17:31:57] *                v3.3                *
+[17:31:57] *             Unloaded.              *
+[17:31:57] *************************************
+
