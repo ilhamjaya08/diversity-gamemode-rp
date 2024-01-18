@@ -1,0 +1,83 @@
+#
+# Package only files
+#
+
+# Compiled Bytecode, precompiled output and assembly
+*.amx
+*.lst
+*.asm
+
+# Vendor directory for dependencies
+dependencies/
+
+# Dependency versions lockfile
+pawn.lock
+
+
+#
+# Server/gamemode related files
+#
+
+# compiled settings file
+# keep `samp.json` file on version control
+# but make sure the `rcon_password` field is set externally
+# you can use the environment variable `SAMP_RCON_PASSWORD` to do this.
+server.cfg
+
+# Plugins directory
+plugins/
+
+# binaries
+*.exe
+*.dll
+*.so
+*.zip
+announce
+samp03svr
+samp-npc
+
+# logs
+*.log
+logs/
+server_log.txt
+crashinfo.txt
+
+# Plugin stuffs, like static library
+*.so*
+
+# Crashdump file
+core
+
+# Environment file
+.env
+
+# Ban list
+samp.ban
+
+# Additional files by plugins
+*.hmap
+
+#
+# Common files
+#
+
+*.sublime-workspace
+
+# RCON
+!rcon/
+!rcon/rcon.exe
+
+# Untuk menyimpan terakhir server menyala (keperluan file log)
+LAST_ON
+
+# Berhubungan dengan skrip AWS
+amazon-ip-blocker/node_modules/
+amazon-ip-blocker/ip-ranges.json
+
+# Discord bot
+discord_bot/node_modules/
+discord_bot/log_collector/dist/
+discord_bot/log_collector/node_modules/
+
+# Konfigurasi MySQL
+mysql.ini

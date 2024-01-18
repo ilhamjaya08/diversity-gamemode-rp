@@ -1,0 +1,6 @@
+#include "mechanic/core.pwn"
+#include "mechanic/callback.pwn"
+#include "mechanic/func.pwn"
+#include "mechanic/cmd.pwn"
+#include "mechanic/dialog.pwn"
+#include "mechanic/timer.pwn"

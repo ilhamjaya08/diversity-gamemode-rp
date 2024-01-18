@@ -1,0 +1,140 @@
+#include <YSI\y_hooks>
+
+hook OnGameModeInit()
+{
+    //Objects////////////////////////////////////////////////////////////////////////////////////////////////////////
+    new tmpobjid;
+    tmpobjid = CreateDynamicObject(3976, 1571.599975, -1675.750000, 35.679698, 0.000000, 0.000000, 0.000000, -1, -1, -1, 300.00, 300.00); 
+    SetDynamicObjectMaterial(tmpobjid, 2, 10765, "airportgnd_sfse", "black64", 0x00000000);
+    SetDynamicObjectMaterial(tmpobjid, 5, 10765, "airportgnd_sfse", "black64", 0x00000000);
+    SetDynamicObjectMaterial(tmpobjid, 6, 16093, "a51_ext", "ws_whitewall2_top", 0x00000000);
+    SetDynamicObjectMaterial(tmpobjid, 7, 10765, "airportgnd_sfse", "black64", 0x00000000);
+    SetDynamicObjectMaterial(tmpobjid, 8, 10765, "airportgnd_sfse", "black64", 0x00000000);
+    SetDynamicObjectMaterial(tmpobjid, 12, 16640, "a51", "vgs_shopwall01_128", 0x00000000);
+    SetDynamicObjectMaterial(tmpobjid, 13, 10765, "airportgnd_sfse", "black64", 0x00000000);
+    tmpobjid = CreateDynamicObject(4150, 1532.050048, -1662.290039, 12.460900, 0.000000, 0.000000, 0.000000, -1, -1, -1, 300.00, 300.00); 
+    SetDynamicObjectMaterial(tmpobjid, 1, 17545, "burnsground", "indund_64", 0x00000000);
+    SetDynamicObjectMaterial(tmpobjid, 2, 17545, "burnsground", "newall10_seamless", 0x00000000);
+    tmpobjid = CreateDynamicObject(19362, 1554.250732, -1656.214965, 23.896833, 0.000000, 0.000007, 0.000000, -1, -1, -1, 300.00, 300.00); 
+    SetDynamicObjectMaterial(tmpobjid, 0, 14534, "ab_wooziea", "mcstraps_window", 0x00000000);
+    tmpobjid = CreateDynamicObject(19362, 1554.250732, -1653.075073, 23.896833, 0.000000, 0.000007, 0.000000, -1, -1, -1, 300.00, 300.00); 
+    SetDynamicObjectMaterial(tmpobjid, 0, 14534, "ab_wooziea", "mcstraps_window", 0x00000000);
+    tmpobjid = CreateDynamicObject(19362, 1554.250732, -1656.214965, 17.916833, 0.000000, 0.000015, 0.000000, -1, -1, -1, 300.00, 300.00); 
+    SetDynamicObjectMaterial(tmpobjid, 0, 14534, "ab_wooziea", "mcstraps_window", 0x00000000);
+    tmpobjid = CreateDynamicObject(19362, 1554.250732, -1653.075073, 17.916833, 0.000000, 0.000015, 0.000000, -1, -1, -1, 300.00, 300.00); 
+    SetDynamicObjectMaterial(tmpobjid, 0, 14534, "ab_wooziea", "mcstraps_window", 0x00000000);
+    tmpobjid = CreateDynamicObject(19362, 1554.250732, -1669.206054, 23.896833, 0.000000, 0.000015, 0.000000, -1, -1, -1, 300.00, 300.00); 
+    SetDynamicObjectMaterial(tmpobjid, 0, 14534, "ab_wooziea", "mcstraps_window", 0x00000000);
+    tmpobjid = CreateDynamicObject(19362, 1554.250732, -1666.066162, 23.896833, 0.000000, 0.000015, 0.000000, -1, -1, -1, 300.00, 300.00); 
+    SetDynamicObjectMaterial(tmpobjid, 0, 14534, "ab_wooziea", "mcstraps_window", 0x00000000);
+    tmpobjid = CreateDynamicObject(19362, 1554.250732, -1669.206054, 17.916833, 0.000000, 0.000022, 0.000000, -1, -1, -1, 300.00, 300.00); 
+    SetDynamicObjectMaterial(tmpobjid, 0, 14534, "ab_wooziea", "mcstraps_window", 0x00000000);
+    tmpobjid = CreateDynamicObject(19362, 1554.250732, -1666.066162, 17.916833, 0.000000, 0.000022, 0.000000, -1, -1, -1, 300.00, 300.00); 
+    SetDynamicObjectMaterial(tmpobjid, 0, 14534, "ab_wooziea", "mcstraps_window", 0x00000000);
+    tmpobjid = CreateDynamicObject(19362, 1554.250732, -1685.096191, 23.896833, 0.000000, 0.000022, 0.000000, -1, -1, -1, 300.00, 300.00); 
+    SetDynamicObjectMaterial(tmpobjid, 0, 14534, "ab_wooziea", "mcstraps_window", 0x00000000);
+    tmpobjid = CreateDynamicObject(19362, 1554.250732, -1681.956298, 23.896833, 0.000000, 0.000022, 0.000000, -1, -1, -1, 300.00, 300.00); 
+    SetDynamicObjectMaterial(tmpobjid, 0, 14534, "ab_wooziea", "mcstraps_window", 0x00000000);
+    tmpobjid = CreateDynamicObject(19362, 1554.250732, -1685.096191, 17.916833, 0.000000, 0.000030, 0.000000, -1, -1, -1, 300.00, 300.00); 
+    SetDynamicObjectMaterial(tmpobjid, 0, 14534, "ab_wooziea", "mcstraps_window", 0x00000000);
+    tmpobjid = CreateDynamicObject(19362, 1554.250732, -1681.956298, 17.916833, 0.000000, 0.000030, 0.000000, -1, -1, -1, 300.00, 300.00); 
+    SetDynamicObjectMaterial(tmpobjid, 0, 14534, "ab_wooziea", "mcstraps_window", 0x00000000);
+    tmpobjid = CreateDynamicObject(19362, 1554.250732, -1698.436645, 23.896833, 0.000000, 0.000030, 0.000000, -1, -1, -1, 300.00, 300.00); 
+    SetDynamicObjectMaterial(tmpobjid, 0, 14534, "ab_wooziea", "mcstraps_window", 0x00000000);
+    tmpobjid = CreateDynamicObject(19362, 1554.250732, -1695.296752, 23.896833, 0.000000, 0.000030, 0.000000, -1, -1, -1, 300.00, 300.00); 
+    SetDynamicObjectMaterial(tmpobjid, 0, 14534, "ab_wooziea", "mcstraps_window", 0x00000000);
+    tmpobjid = CreateDynamicObject(19362, 1554.250732, -1698.436645, 17.916833, 0.000000, 0.000038, 0.000000, -1, -1, -1, 300.00, 300.00); 
+    SetDynamicObjectMaterial(tmpobjid, 0, 14534, "ab_wooziea", "mcstraps_window", 0x00000000);
+    tmpobjid = CreateDynamicObject(19362, 1554.250732, -1695.296752, 17.916833, 0.000000, 0.000038, 0.000000, -1, -1, -1, 300.00, 300.00); 
+    SetDynamicObjectMaterial(tmpobjid, 0, 14534, "ab_wooziea", "mcstraps_window", 0x00000000);
+    tmpobjid = CreateDynamicObject(19362, 1543.161499, -1707.737792, 24.156824, 0.000000, 0.000038, 0.000000, -1, -1, -1, 300.00, 300.00); 
+    SetDynamicObjectMaterial(tmpobjid, 0, 10765, "airportgnd_sfse", "black64", 0x00000000);
+    tmpobjid = CreateDynamicObject(19362, 1543.161499, -1707.737792, 20.696828, 0.000000, 0.000038, 0.000000, -1, -1, -1, 300.00, 300.00); 
+    SetDynamicObjectMaterial(tmpobjid, 0, 10765, "airportgnd_sfse", "black64", 0x00000000);
+    tmpobjid = CreateDynamicObject(19362, 1543.161499, -1707.737792, 17.206830, 0.000000, 0.000038, 0.000000, -1, -1, -1, 300.00, 300.00); 
+    SetDynamicObjectMaterial(tmpobjid, 0, 10765, "airportgnd_sfse", "black64", 0x00000000);
+    tmpobjid = CreateDynamicObject(19482, 1543.055786, -1707.652587, 25.014318, 0.000000, -0.000007, 179.999954, -1, -1, -1, 300.00, 300.00); 
+    SetDynamicObjectMaterialText(tmpobjid, 0, "{fffafa} p", 120, "Engravers MT", 120, 1, 0x00000000, 0x00000000, 1);
+    tmpobjid = CreateDynamicObject(19482, 1543.055786, -1707.652587, 23.324296, 0.000000, -0.000007, 179.999954, -1, -1, -1, 300.00, 300.00); 
+    SetDynamicObjectMaterialText(tmpobjid, 0, "{fffafa} o", 120, "Engravers MT", 120, 1, 0x00000000, 0x00000000, 1);
+    tmpobjid = CreateDynamicObject(19482, 1543.055786, -1707.652587, 21.554304, 0.000000, -0.000007, 179.999954, -1, -1, -1, 300.00, 300.00); 
+    SetDynamicObjectMaterialText(tmpobjid, 0, "{fffafa} l", 120, "Engravers MT", 120, 1, 0x00000000, 0x00000000, 1);
+    tmpobjid = CreateDynamicObject(19482, 1543.055786, -1707.652587, 19.854297, 0.000000, -0.000007, 179.999954, -1, -1, -1, 300.00, 300.00); 
+    SetDynamicObjectMaterialText(tmpobjid, 0, "{fffafa} i", 120, "Engravers MT", 120, 1, 0x00000000, 0x00000000, 1);
+    tmpobjid = CreateDynamicObject(19482, 1543.055786, -1707.652587, 18.134286, 0.000000, -0.000007, 179.999954, -1, -1, -1, 300.00, 300.00); 
+    SetDynamicObjectMaterialText(tmpobjid, 0, "{fffafa} c", 120, "Engravers MT", 120, 1, 0x00000000, 0x00000000, 1);
+    tmpobjid = CreateDynamicObject(19482, 1543.055786, -1707.652587, 16.414287, 0.000000, -0.000007, 179.999954, -1, -1, -1, 300.00, 300.00); 
+    SetDynamicObjectMaterialText(tmpobjid, 0, "{fffafa} e", 120, "Engravers MT", 120, 1, 0x00000000, 0x00000000, 1);
+    tmpobjid = CreateDynamicObject(19362, 1543.161499, -1643.826049, 24.156824, 0.000000, 0.000045, 0.000000, -1, -1, -1, 300.00, 300.00); 
+    SetDynamicObjectMaterial(tmpobjid, 0, 10765, "airportgnd_sfse", "black64", 0x00000000);
+    tmpobjid = CreateDynamicObject(19362, 1543.161499, -1643.826049, 20.696828, 0.000000, 0.000045, 0.000000, -1, -1, -1, 300.00, 300.00); 
+    SetDynamicObjectMaterial(tmpobjid, 0, 10765, "airportgnd_sfse", "black64", 0x00000000);
+    tmpobjid = CreateDynamicObject(19362, 1543.161499, -1643.826049, 17.206830, 0.000000, 0.000045, 0.000000, -1, -1, -1, 300.00, 300.00); 
+    SetDynamicObjectMaterial(tmpobjid, 0, 10765, "airportgnd_sfse", "black64", 0x00000000);
+    tmpobjid = CreateDynamicObject(19482, 1543.055786, -1643.740844, 25.014318, 0.000000, -0.000015, 179.999908, -1, -1, -1, 300.00, 300.00); 
+    SetDynamicObjectMaterialText(tmpobjid, 0, "{fffafa} p", 120, "Engravers MT", 120, 1, 0x00000000, 0x00000000, 1);
+    tmpobjid = CreateDynamicObject(19482, 1543.055786, -1643.740844, 23.324296, 0.000000, -0.000015, 179.999908, -1, -1, -1, 300.00, 300.00); 
+    SetDynamicObjectMaterialText(tmpobjid, 0, "{fffafa} o", 120, "Engravers MT", 120, 1, 0x00000000, 0x00000000, 1);
+    tmpobjid = CreateDynamicObject(19482, 1543.055786, -1643.740844, 21.554304, 0.000000, -0.000015, 179.999908, -1, -1, -1, 300.00, 300.00); 
+    SetDynamicObjectMaterialText(tmpobjid, 0, "{fffafa} l", 120, "Engravers MT", 120, 1, 0x00000000, 0x00000000, 1);
+    tmpobjid = CreateDynamicObject(19482, 1543.055786, -1643.740844, 19.854297, 0.000000, -0.000015, 179.999908, -1, -1, -1, 300.00, 300.00); 
+    SetDynamicObjectMaterialText(tmpobjid, 0, "{fffafa} i", 120, "Engravers MT", 120, 1, 0x00000000, 0x00000000, 1);
+    tmpobjid = CreateDynamicObject(19482, 1543.055786, -1643.740844, 18.134286, 0.000000, -0.000015, 179.999908, -1, -1, -1, 300.00, 300.00); 
+    SetDynamicObjectMaterialText(tmpobjid, 0, "{fffafa} c", 120, "Engravers MT", 120, 1, 0x00000000, 0x00000000, 1);
+    tmpobjid = CreateDynamicObject(19482, 1543.055786, -1643.740844, 16.414287, 0.000000, -0.000015, 179.999908, -1, -1, -1, 300.00, 300.00); 
+    SetDynamicObjectMaterialText(tmpobjid, 0, "{fffafa} e", 120, "Engravers MT", 120, 1, 0x00000000, 0x00000000, 1);
+    tmpobjid = CreateDynamicObject(19362, 1558.462158, -1677.085449, 34.146850, 0.000000, 0.000045, 0.000000, -1, -1, -1, 300.00, 300.00); 
+    SetDynamicObjectMaterial(tmpobjid, 0, 14534, "ab_wooziea", "mcstraps_window", 0x00000000);
+    tmpobjid = CreateDynamicObject(19362, 1558.462158, -1673.945556, 34.146850, 0.000000, 0.000045, 0.000000, -1, -1, -1, 300.00, 300.00); 
+    SetDynamicObjectMaterial(tmpobjid, 0, 14534, "ab_wooziea", "mcstraps_window", 0x00000000);
+    tmpobjid = CreateDynamicObject(19362, 1558.462158, -1677.085449, 48.896789, 0.000000, 0.000053, 0.000000, -1, -1, -1, 300.00, 300.00); 
+    SetDynamicObjectMaterial(tmpobjid, 0, 14534, "ab_wooziea", "mcstraps_window", 0x00000000);
+    tmpobjid = CreateDynamicObject(19362, 1558.462158, -1673.945556, 48.896789, 0.000000, 0.000053, 0.000000, -1, -1, -1, 300.00, 300.00); 
+    SetDynamicObjectMaterial(tmpobjid, 0, 14534, "ab_wooziea", "mcstraps_window", 0x00000000);
+    tmpobjid = CreateDynamicObject(19362, 1558.462158, -1677.085449, 41.586833, 0.000000, 0.000061, 0.000000, -1, -1, -1, 300.00, 300.00); 
+    SetDynamicObjectMaterial(tmpobjid, 0, 14534, "ab_wooziea", "mcstraps_window", 0x00000000);
+    tmpobjid = CreateDynamicObject(19362, 1558.462158, -1673.945556, 41.586833, 0.000000, 0.000061, 0.000000, -1, -1, -1, 300.00, 300.00); 
+    SetDynamicObjectMaterial(tmpobjid, 0, 14534, "ab_wooziea", "mcstraps_window", 0x00000000);
+    tmpobjid = CreateDynamicObject(1483, 1519.101196, -1685.702758, 14.462769, 0.000000, 0.000015, 0.000000, -1, -1, -1, 300.00, 300.00); 
+    SetDynamicObjectMaterial(tmpobjid, 0, 18065, "ab_sfammumain", "shelf_glas", 0x00000000);
+    SetDynamicObjectMaterial(tmpobjid, 1, 10765, "airportgnd_sfse", "black64", 0x00000000);
+    tmpobjid = CreateDynamicObject(1483, 1519.101196, -1679.152709, 14.462769, 0.000000, 0.000015, 0.000000, -1, -1, -1, 300.00, 300.00); 
+    SetDynamicObjectMaterial(tmpobjid, 0, 18065, "ab_sfammumain", "shelf_glas", 0x00000000);
+    SetDynamicObjectMaterial(tmpobjid, 1, 10765, "airportgnd_sfse", "black64", 0x00000000);
+    tmpobjid = CreateDynamicObject(1483, 1519.101196, -1672.622924, 14.462769, 0.000000, 0.000015, 0.000000, -1, -1, -1, 300.00, 300.00); 
+    SetDynamicObjectMaterial(tmpobjid, 0, 18065, "ab_sfammumain", "shelf_glas", 0x00000000);
+    SetDynamicObjectMaterial(tmpobjid, 1, 10765, "airportgnd_sfse", "black64", 0x00000000);
+    tmpobjid = CreateDynamicObject(1483, 1519.101196, -1667.762084, 14.462769, 0.000000, 0.000015, 0.000000, -1, -1, -1, 300.00, 300.00); 
+    SetDynamicObjectMaterial(tmpobjid, 0, 18065, "ab_sfammumain", "shelf_glas", 0x00000000);
+    SetDynamicObjectMaterial(tmpobjid, 1, 10765, "airportgnd_sfse", "black64", 0x00000000);
+    tmpobjid = CreateDynamicObject(970, 1519.811401, -1689.755737, 13.066866, 0.000000, 0.000000, 0.000000, -1, -1, -1, 300.00, 300.00); 
+    SetDynamicObjectMaterial(tmpobjid, 0, 14581, "ab_mafiasuitea", "barbersmir1", 0x00000000);
+    SetDynamicObjectMaterial(tmpobjid, 1, 10765, "airportgnd_sfse", "black64", 0x00000000);
+    tmpobjid = CreateDynamicObject(970, 1521.961914, -1689.755737, 13.066866, 0.000000, 0.000000, 0.000000, -1, -1, -1, 300.00, 300.00); 
+    SetDynamicObjectMaterial(tmpobjid, 0, 14581, "ab_mafiasuitea", "barbersmir1", 0x00000000);
+    SetDynamicObjectMaterial(tmpobjid, 1, 10765, "airportgnd_sfse", "black64", 0x00000000);
+    tmpobjid = CreateDynamicObject(970, 1519.811401, -1664.223876, 13.066866, 0.000000, 0.000015, 0.000000, -1, -1, -1, 300.00, 300.00); 
+    SetDynamicObjectMaterial(tmpobjid, 0, 14581, "ab_mafiasuitea", "barbersmir1", 0x00000000);
+    SetDynamicObjectMaterial(tmpobjid, 1, 10765, "airportgnd_sfse", "black64", 0x00000000);
+    tmpobjid = CreateDynamicObject(970, 1521.961914, -1664.223876, 13.066866, 0.000000, 0.000015, 0.000000, -1, -1, -1, 300.00, 300.00); 
+    SetDynamicObjectMaterial(tmpobjid, 0, 14581, "ab_mafiasuitea", "barbersmir1", 0x00000000);
+    SetDynamicObjectMaterial(tmpobjid, 1, 10765, "airportgnd_sfse", "black64", 0x00000000);
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    tmpobjid = CreateDynamicObject(671, 1153.469970, -2111.909912, 69.101600, 0.000000, 0.000000, 0.000000, -1, -1, -1, 300.00, 300.00); 
+    return 1;
+}
+
+hook OnPlayerConnect(playerid)
+{
+    RemoveBuildingForPlayer(playerid, 3976, 1571.599, -1675.750, 35.679, 0.250);
+    RemoveBuildingForPlayer(playerid, 4064, 1571.599, -1675.750, 35.679, 0.250);
+    RemoveBuildingForPlayer(playerid, 671, 1153.469, -2111.909, 69.101, 0.250);
+    RemoveBuildingForPlayer(playerid, 4150, 1532.050, -1662.290, 12.460, 0.250);
+    RemoveBuildingForPlayer(playerid, 4151, 1532.050, -1662.290, 12.460, 0.250);
+    RemoveBuildingForPlayer(playerid, 1226, 1524.829, -1668.079, 16.421, 0.250);
+    RemoveBuildingForPlayer(playerid, 1229, 1524.219, -1673.709, 14.109, 0.250);
+    RemoveBuildingForPlayer(playerid, 1226, 1524.829, -1688.089, 16.421, 0.250);
+    return 1;
+}

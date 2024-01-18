@@ -1,0 +1,916 @@
+#include <a_samp>
+#include <zcmd>
+//============================================================
+//--->>> Variables
+//============================================================
+new PlayerText:PhoneGUI[MAX_PLAYERS][44];
+new bool:PhoneShow[MAX_PLAYERS];
+new PhoneLocked[MAX_PLAYERS] = 0; //0- reseted, 1- locked, 2- unlocked, 3- Internet Item in list
+//============================================================
+//--->>> Publics
+//============================================================
+public OnPlayerConnect(playerid)
+{
+	PhoneModeInit(playerid);
+	PhoneShow[playerid] = false;
+	PhoneLocked[playerid] = 0;
+	return 1;
+}
+
+public OnPlayerDisconnect(playerid, reason)
+{
+	for(new i = 0; i < 44; i++)
+	{
+		PlayerTextDrawDestroy(playerid, PhoneGUI[playerid][i]);
+	}
+	PhoneShow[playerid] = false;
+	PhoneLocked[playerid] = 0;
+	return 1;
+}
+
+public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
+{
+	if(newkeys == KEY_YES)
+	{
+		if(PhoneShow[playerid] == true && PhoneLocked[playerid] == 1)
+		{
+			ShowPlayerPhoneMenu(playerid);
+			SelectTextDraw(playerid, 0xFFD900FF);
+			PhoneLocked[playerid] = 2;
+			SendClientMessage(playerid, -1, "DEBUG: Phone is unlocked!");
+		}
+	}
+	return 1;
+}
+
+public OnPlayerClickTextDraw(playerid, Text:clickedid)
+{
+    if(clickedid == Text:INVALID_TEXT_DRAW)// ESC
+    {
+    	if(PhoneShow[playerid] == true && PhoneLocked[playerid] == 2 || PhoneLocked[playerid] == 3)
+    	{
+    		HideWholePhone(playerid);
+    		PhoneLocked[playerid] = 0;
+    		PhoneShow[playerid] = false;
+    		TogglePlayerControllable(playerid, 1);
+    		CancelSelectTextDraw(playerid);
+    		SendClientMessage(playerid, -1, "DEBUG: Phone is reseted also hidden becouse of ESC!");
+    	}
+    }
+    return 1;
+}
+
+public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
+{
+    if(playertextid == PhoneGUI[playerid][36])//Back botton
+    {
+    	if(PhoneLocked[playerid] == 2)
+    	{
+    		HidePlayerPhoneMenu(playerid);
+    		PhoneLocked[playerid] = 1;
+    		CancelSelectTextDraw(playerid);
+    		SendClientMessage(playerid, -1, "DEBUG: Phone is locked also you clicked on BACK!");
+    	}
+    	else if(PhoneLocked[playerid] == 3)
+    	{
+    		ShowPlayerPhoneMenu(playerid);
+    		PlayerTextDrawHide(playerid, PhoneGUI[playerid][31]);
+    		PhoneLocked[playerid] = 2;
+    		SendClientMessage(playerid, -1, "DEBUG: Phone is unlocked also you clicked on BACK to the main menu!");
+    	}
+    }
+    if(playertextid == PhoneGUI[playerid][37])//Call
+    {
+        if(PhoneLocked[playerid] == 2)
+    	{
+    		HidePlayerPhoneMenu(playerid);
+    		PhoneLocked[playerid] = 1;
+    		CancelSelectTextDraw(playerid);
+    		SendClientMessage(playerid, -1, "DEBUG: Phone is locked also you clicked on CALL!");
+    	}
+    }
+    if(playertextid == PhoneGUI[playerid][38])//SMS
+    {
+        if(PhoneLocked[playerid] == 2)
+    	{
+    		HidePlayerPhoneMenu(playerid);
+    		PhoneLocked[playerid] = 1;
+    		CancelSelectTextDraw(playerid);
+    		SendClientMessage(playerid, -1, "DEBUG: Phone is locked also you clicked on SMS!");
+    	}
+    }
+    if(playertextid == PhoneGUI[playerid][39])//Add Contacts
+    {
+       if(PhoneLocked[playerid] == 2)
+    	{
+    		HidePlayerPhoneMenu(playerid);
+    		PhoneLocked[playerid] = 1;
+    		CancelSelectTextDraw(playerid);
+    		SendClientMessage(playerid, -1, "DEBUG: Phone is locked also you clicked on ADD CONTACTS!");
+    	} 
+    }
+    if(playertextid == PhoneGUI[playerid][40])//List Contacts
+    {
+       	if(PhoneLocked[playerid] == 2)
+    	{
+    		HidePlayerPhoneMenu(playerid);
+    		PhoneLocked[playerid] = 1;
+    		CancelSelectTextDraw(playerid);
+    		SendClientMessage(playerid, -1, "DEBUG: Phone is locked also you clicked on LIST OF CONTACTS!");
+    	} 
+    }
+    if(playertextid == PhoneGUI[playerid][41])//Camera
+    {
+       	if(PhoneLocked[playerid] == 2)
+    	{
+    		HidePlayerPhoneMenu(playerid);
+    		PhoneLocked[playerid] = 1;
+    		CancelSelectTextDraw(playerid);
+    		SendClientMessage(playerid, -1, "DEBUG: Phone is locked also you clicked on CAMERA!");
+    	} 
+    }
+    if(playertextid == PhoneGUI[playerid][42])//Internet
+    {
+    	if(PhoneLocked[playerid] == 2)
+    	{
+    		HidePlayerPhoneMenu(playerid);
+    		PlayerTextDrawHide(playerid, PhoneGUI[playerid][43]);
+			PlayerTextDrawHide(playerid, PhoneGUI[playerid][29]);
+			PlayerTextDrawHide(playerid, PhoneGUI[playerid][27]);
+			PlayerTextDrawShow(playerid, PhoneGUI[playerid][31]);
+			PlayerTextDrawShow(playerid, PhoneGUI[playerid][35]);
+			PlayerTextDrawShow(playerid, PhoneGUI[playerid][36]);
+    		PhoneLocked[playerid] = 3;
+    		SendClientMessage(playerid, -1, "DEBUG: Phone is locked also you clicked on INTERNET!");
+    	}  
+    }
+    return 1;
+}
+
+//============================================================
+//--->>> Stocks
+//============================================================
+stock PhoneModeInit(playerid)
+{
+	PhoneGUI[playerid][0] = CreatePlayerTextDraw(playerid,543.000000, 300.000000, "_");
+	PlayerTextDrawBackgroundColor(playerid,PhoneGUI[playerid][0], 255);
+	PlayerTextDrawFont(playerid,PhoneGUI[playerid][0], 1);
+	PlayerTextDrawLetterSize(playerid,PhoneGUI[playerid][0], 0.500000, 13.300001);
+	PlayerTextDrawColor(playerid,PhoneGUI[playerid][0], -1);
+	PlayerTextDrawSetOutline(playerid,PhoneGUI[playerid][0], 0);
+	PlayerTextDrawSetProportional(playerid,PhoneGUI[playerid][0], 1);
+	PlayerTextDrawSetShadow(playerid,PhoneGUI[playerid][0], 1);
+	PlayerTextDrawUseBox(playerid,PhoneGUI[playerid][0], 1);
+	PlayerTextDrawBoxColor(playerid,PhoneGUI[playerid][0], 255);
+	PlayerTextDrawTextSize(playerid,PhoneGUI[playerid][0], 621.000000, 0.000000);
+	PlayerTextDrawSetSelectable(playerid,PhoneGUI[playerid][0], 0);
+
+	PhoneGUI[playerid][1] = CreatePlayerTextDraw(playerid,534.000000, 238.000000, "LD_BEAT:chit");
+	PlayerTextDrawBackgroundColor(playerid,PhoneGUI[playerid][1], 255);
+	PlayerTextDrawFont(playerid,PhoneGUI[playerid][1], 4);
+	PlayerTextDrawLetterSize(playerid,PhoneGUI[playerid][1], 0.500000, 1.000000);
+	PlayerTextDrawColor(playerid,PhoneGUI[playerid][1], 255);
+	PlayerTextDrawSetOutline(playerid,PhoneGUI[playerid][1], 0);
+	PlayerTextDrawSetProportional(playerid,PhoneGUI[playerid][1], 1);
+	PlayerTextDrawSetShadow(playerid,PhoneGUI[playerid][1], 1);
+	PlayerTextDrawUseBox(playerid,PhoneGUI[playerid][1], 1);
+	PlayerTextDrawBoxColor(playerid,PhoneGUI[playerid][1], 255);
+	PlayerTextDrawTextSize(playerid,PhoneGUI[playerid][1], 19.000000, 21.000000);
+	PlayerTextDrawSetSelectable(playerid,PhoneGUI[playerid][1], 0);
+
+	PhoneGUI[playerid][2] = CreatePlayerTextDraw(playerid,611.000000, 238.000000, "LD_BEAT:chit");
+	PlayerTextDrawBackgroundColor(playerid,PhoneGUI[playerid][2], 255);
+	PlayerTextDrawFont(playerid,PhoneGUI[playerid][2], 4);
+	PlayerTextDrawLetterSize(playerid,PhoneGUI[playerid][2], 0.500000, 1.000000);
+	PlayerTextDrawColor(playerid,PhoneGUI[playerid][2], 255);
+	PlayerTextDrawSetOutline(playerid,PhoneGUI[playerid][2], 0);
+	PlayerTextDrawSetProportional(playerid,PhoneGUI[playerid][2], 1);
+	PlayerTextDrawSetShadow(playerid,PhoneGUI[playerid][2], 1);
+	PlayerTextDrawUseBox(playerid,PhoneGUI[playerid][2], 1);
+	PlayerTextDrawBoxColor(playerid,PhoneGUI[playerid][2], 255);
+	PlayerTextDrawTextSize(playerid,PhoneGUI[playerid][2], 19.000000, 21.000000);
+	PlayerTextDrawSetSelectable(playerid,PhoneGUI[playerid][2], 0);
+
+	PhoneGUI[playerid][3] = CreatePlayerTextDraw(playerid,611.000000, 404.000000, "LD_BEAT:chit");
+	PlayerTextDrawBackgroundColor(playerid,PhoneGUI[playerid][3], 255);
+	PlayerTextDrawFont(playerid,PhoneGUI[playerid][3], 4);
+	PlayerTextDrawLetterSize(playerid,PhoneGUI[playerid][3], 0.500000, 1.000000);
+	PlayerTextDrawColor(playerid,PhoneGUI[playerid][3], 255);
+	PlayerTextDrawSetOutline(playerid,PhoneGUI[playerid][3], 0);
+	PlayerTextDrawSetProportional(playerid,PhoneGUI[playerid][3], 1);
+	PlayerTextDrawSetShadow(playerid,PhoneGUI[playerid][3], 1);
+	PlayerTextDrawUseBox(playerid,PhoneGUI[playerid][3], 1);
+	PlayerTextDrawBoxColor(playerid,PhoneGUI[playerid][3], 255);
+	PlayerTextDrawTextSize(playerid,PhoneGUI[playerid][3], 19.000000, 21.000000);
+	PlayerTextDrawSetSelectable(playerid,PhoneGUI[playerid][3], 0);
+
+	PhoneGUI[playerid][4] = CreatePlayerTextDraw(playerid,534.000000, 404.000000, "LD_BEAT:chit");
+	PlayerTextDrawBackgroundColor(playerid,PhoneGUI[playerid][4], 255);
+	PlayerTextDrawFont(playerid,PhoneGUI[playerid][4], 4);
+	PlayerTextDrawLetterSize(playerid,PhoneGUI[playerid][4], 0.500000, 1.000000);
+	PlayerTextDrawColor(playerid,PhoneGUI[playerid][4], 255);
+	PlayerTextDrawSetOutline(playerid,PhoneGUI[playerid][4], 0);
+	PlayerTextDrawSetProportional(playerid,PhoneGUI[playerid][4], 1);
+	PlayerTextDrawSetShadow(playerid,PhoneGUI[playerid][4], 1);
+	PlayerTextDrawUseBox(playerid,PhoneGUI[playerid][4], 1);
+	PlayerTextDrawBoxColor(playerid,PhoneGUI[playerid][4], 255);
+	PlayerTextDrawTextSize(playerid,PhoneGUI[playerid][4], 19.000000, 21.000000);
+	PlayerTextDrawSetSelectable(playerid,PhoneGUI[playerid][4], 0);
+
+	PhoneGUI[playerid][5] = CreatePlayerTextDraw(playerid,539.000000, 248.000000, "_");
+	PlayerTextDrawBackgroundColor(playerid,PhoneGUI[playerid][5], 255);
+	PlayerTextDrawFont(playerid,PhoneGUI[playerid][5], 1);
+	PlayerTextDrawLetterSize(playerid,PhoneGUI[playerid][5], 0.500000, 18.400001);
+	PlayerTextDrawColor(playerid,PhoneGUI[playerid][5], -1);
+	PlayerTextDrawSetOutline(playerid,PhoneGUI[playerid][5], 0);
+	PlayerTextDrawSetProportional(playerid,PhoneGUI[playerid][5], 1);
+	PlayerTextDrawSetShadow(playerid,PhoneGUI[playerid][5], 1);
+	PlayerTextDrawUseBox(playerid,PhoneGUI[playerid][5], 1);
+	PlayerTextDrawBoxColor(playerid,PhoneGUI[playerid][5], 255);
+	PlayerTextDrawTextSize(playerid,PhoneGUI[playerid][5], 625.000000, 0.000000);
+	PlayerTextDrawSetSelectable(playerid,PhoneGUI[playerid][5], 0);
+
+	PhoneGUI[playerid][6] = CreatePlayerTextDraw(playerid,545.000000, 243.000000, "_");
+	PlayerTextDrawBackgroundColor(playerid,PhoneGUI[playerid][6], 255);
+	PlayerTextDrawFont(playerid,PhoneGUI[playerid][6], 1);
+	PlayerTextDrawLetterSize(playerid,PhoneGUI[playerid][6], 0.500000, 18.100000);
+	PlayerTextDrawColor(playerid,PhoneGUI[playerid][6], -1);
+	PlayerTextDrawSetOutline(playerid,PhoneGUI[playerid][6], 0);
+	PlayerTextDrawSetProportional(playerid,PhoneGUI[playerid][6], 1);
+	PlayerTextDrawSetShadow(playerid,PhoneGUI[playerid][6], 1);
+	PlayerTextDrawUseBox(playerid,PhoneGUI[playerid][6], 1);
+	PlayerTextDrawBoxColor(playerid,PhoneGUI[playerid][6], 255);
+	PlayerTextDrawTextSize(playerid,PhoneGUI[playerid][6], 619.000000, 1.000000);
+	PlayerTextDrawSetSelectable(playerid,PhoneGUI[playerid][6], 0);
+
+	PhoneGUI[playerid][7] = CreatePlayerTextDraw(playerid,542.000000, 246.000000, "ld_grav:sky");
+	PlayerTextDrawBackgroundColor(playerid,PhoneGUI[playerid][7], 255);
+	PlayerTextDrawFont(playerid,PhoneGUI[playerid][7], 4);
+	PlayerTextDrawLetterSize(playerid,PhoneGUI[playerid][7], 0.500000, 1.000000);
+	PlayerTextDrawColor(playerid,PhoneGUI[playerid][7], -1);
+	PlayerTextDrawSetOutline(playerid,PhoneGUI[playerid][7], 0);
+	PlayerTextDrawSetProportional(playerid,PhoneGUI[playerid][7], 1);
+	PlayerTextDrawSetShadow(playerid,PhoneGUI[playerid][7], 1);
+	PlayerTextDrawUseBox(playerid,PhoneGUI[playerid][7], 1);
+	PlayerTextDrawBoxColor(playerid,PhoneGUI[playerid][7], 255);
+	PlayerTextDrawTextSize(playerid,PhoneGUI[playerid][7], 80.000000, 112.000000);
+	PlayerTextDrawSetSelectable(playerid,PhoneGUI[playerid][7], 0);
+
+	PhoneGUI[playerid][8] = CreatePlayerTextDraw(playerid,552.000000, 368.000000, "1");
+	PlayerTextDrawAlignment(playerid,PhoneGUI[playerid][8], 3);
+	PlayerTextDrawBackgroundColor(playerid,PhoneGUI[playerid][8], 255);
+	PlayerTextDrawFont(playerid,PhoneGUI[playerid][8], 1);
+	PlayerTextDrawLetterSize(playerid,PhoneGUI[playerid][8], 0.379999, 1.200000);
+	PlayerTextDrawColor(playerid,PhoneGUI[playerid][8], -1);
+	PlayerTextDrawSetOutline(playerid,PhoneGUI[playerid][8], 0);
+	PlayerTextDrawSetProportional(playerid,PhoneGUI[playerid][8], 1);
+	PlayerTextDrawSetShadow(playerid,PhoneGUI[playerid][8], 1);
+	PlayerTextDrawSetSelectable(playerid,PhoneGUI[playerid][8], 0);
+
+	PhoneGUI[playerid][9] = CreatePlayerTextDraw(playerid,554.000000, 384.000000, "4");
+	PlayerTextDrawAlignment(playerid,PhoneGUI[playerid][9], 3);
+	PlayerTextDrawBackgroundColor(playerid,PhoneGUI[playerid][9], 255);
+	PlayerTextDrawFont(playerid,PhoneGUI[playerid][9], 1);
+	PlayerTextDrawLetterSize(playerid,PhoneGUI[playerid][9], 0.379999, 1.200000);
+	PlayerTextDrawColor(playerid,PhoneGUI[playerid][9], -1);
+	PlayerTextDrawSetOutline(playerid,PhoneGUI[playerid][9], 0);
+	PlayerTextDrawSetProportional(playerid,PhoneGUI[playerid][9], 1);
+	PlayerTextDrawSetShadow(playerid,PhoneGUI[playerid][9], 1);
+	PlayerTextDrawSetSelectable(playerid,PhoneGUI[playerid][9], 0);
+
+	PhoneGUI[playerid][10] = CreatePlayerTextDraw(playerid,554.000000, 399.000000, "7");
+	PlayerTextDrawAlignment(playerid,PhoneGUI[playerid][10], 3);
+	PlayerTextDrawBackgroundColor(playerid,PhoneGUI[playerid][10], 255);
+	PlayerTextDrawFont(playerid,PhoneGUI[playerid][10], 1);
+	PlayerTextDrawLetterSize(playerid,PhoneGUI[playerid][10], 0.379999, 1.200000);
+	PlayerTextDrawColor(playerid,PhoneGUI[playerid][10], -1);
+	PlayerTextDrawSetOutline(playerid,PhoneGUI[playerid][10], 0);
+	PlayerTextDrawSetProportional(playerid,PhoneGUI[playerid][10], 1);
+	PlayerTextDrawSetShadow(playerid,PhoneGUI[playerid][10], 1);
+	PlayerTextDrawSetSelectable(playerid,PhoneGUI[playerid][10], 0);
+
+	PhoneGUI[playerid][11] = CreatePlayerTextDraw(playerid,552.000000, 373.000000, ".");
+	PlayerTextDrawBackgroundColor(playerid,PhoneGUI[playerid][11], 255);
+	PlayerTextDrawFont(playerid,PhoneGUI[playerid][11], 1);
+	PlayerTextDrawLetterSize(playerid,PhoneGUI[playerid][11], 0.379999, 0.799998);
+	PlayerTextDrawColor(playerid,PhoneGUI[playerid][11], -1);
+	PlayerTextDrawSetOutline(playerid,PhoneGUI[playerid][11], 0);
+	PlayerTextDrawSetProportional(playerid,PhoneGUI[playerid][11], 1);
+	PlayerTextDrawSetShadow(playerid,PhoneGUI[playerid][11], 1);
+	PlayerTextDrawSetSelectable(playerid,PhoneGUI[playerid][11], 0);
+
+	PhoneGUI[playerid][12] = CreatePlayerTextDraw(playerid,553.000000, 390.000000, "ghi");
+	PlayerTextDrawBackgroundColor(playerid,PhoneGUI[playerid][12], 255);
+	PlayerTextDrawFont(playerid,PhoneGUI[playerid][12], 1);
+	PlayerTextDrawLetterSize(playerid,PhoneGUI[playerid][12], 0.200000, 0.799998);
+	PlayerTextDrawColor(playerid,PhoneGUI[playerid][12], -1);
+	PlayerTextDrawSetOutline(playerid,PhoneGUI[playerid][12], 0);
+	PlayerTextDrawSetProportional(playerid,PhoneGUI[playerid][12], 1);
+	PlayerTextDrawSetShadow(playerid,PhoneGUI[playerid][12], 1);
+	PlayerTextDrawSetSelectable(playerid,PhoneGUI[playerid][12], 0);
+
+	PhoneGUI[playerid][13] = CreatePlayerTextDraw(playerid,552.000000, 403.000000, "pqrs");
+	PlayerTextDrawBackgroundColor(playerid,PhoneGUI[playerid][13], 255);
+	PlayerTextDrawFont(playerid,PhoneGUI[playerid][13], 1);
+	PlayerTextDrawLetterSize(playerid,PhoneGUI[playerid][13], 0.209999, 0.799998);
+	PlayerTextDrawColor(playerid,PhoneGUI[playerid][13], -1);
+	PlayerTextDrawSetOutline(playerid,PhoneGUI[playerid][13], 0);
+	PlayerTextDrawSetProportional(playerid,PhoneGUI[playerid][13], 1);
+	PlayerTextDrawSetShadow(playerid,PhoneGUI[playerid][13], 1);
+	PlayerTextDrawSetSelectable(playerid,PhoneGUI[playerid][13], 0);
+
+	PhoneGUI[playerid][14] = CreatePlayerTextDraw(playerid,580.000000, 369.000000, "2");
+	PlayerTextDrawAlignment(playerid,PhoneGUI[playerid][14], 3);
+	PlayerTextDrawBackgroundColor(playerid,PhoneGUI[playerid][14], 255);
+	PlayerTextDrawFont(playerid,PhoneGUI[playerid][14], 1);
+	PlayerTextDrawLetterSize(playerid,PhoneGUI[playerid][14], 0.379999, 1.200000);
+	PlayerTextDrawColor(playerid,PhoneGUI[playerid][14], -1);
+	PlayerTextDrawSetOutline(playerid,PhoneGUI[playerid][14], 0);
+	PlayerTextDrawSetProportional(playerid,PhoneGUI[playerid][14], 1);
+	PlayerTextDrawSetShadow(playerid,PhoneGUI[playerid][14], 1);
+	PlayerTextDrawSetSelectable(playerid,PhoneGUI[playerid][14], 0);
+
+	PhoneGUI[playerid][15] = CreatePlayerTextDraw(playerid,580.000000, 385.000000, "5");
+	PlayerTextDrawAlignment(playerid,PhoneGUI[playerid][15], 3);
+	PlayerTextDrawBackgroundColor(playerid,PhoneGUI[playerid][15], 255);
+	PlayerTextDrawFont(playerid,PhoneGUI[playerid][15], 1);
+	PlayerTextDrawLetterSize(playerid,PhoneGUI[playerid][15], 0.379999, 1.200000);
+	PlayerTextDrawColor(playerid,PhoneGUI[playerid][15], -1);
+	PlayerTextDrawSetOutline(playerid,PhoneGUI[playerid][15], 0);
+	PlayerTextDrawSetProportional(playerid,PhoneGUI[playerid][15], 1);
+	PlayerTextDrawSetShadow(playerid,PhoneGUI[playerid][15], 1);
+	PlayerTextDrawSetSelectable(playerid,PhoneGUI[playerid][15], 0);
+
+	PhoneGUI[playerid][16] = CreatePlayerTextDraw(playerid,580.000000, 400.000000, "8");
+	PlayerTextDrawAlignment(playerid,PhoneGUI[playerid][16], 3);
+	PlayerTextDrawBackgroundColor(playerid,PhoneGUI[playerid][16], 255);
+	PlayerTextDrawFont(playerid,PhoneGUI[playerid][16], 1);
+	PlayerTextDrawLetterSize(playerid,PhoneGUI[playerid][16], 0.379999, 1.200000);
+	PlayerTextDrawColor(playerid,PhoneGUI[playerid][16], -1);
+	PlayerTextDrawSetOutline(playerid,PhoneGUI[playerid][16], 0);
+	PlayerTextDrawSetProportional(playerid,PhoneGUI[playerid][16], 1);
+	PlayerTextDrawSetShadow(playerid,PhoneGUI[playerid][16], 1);
+	PlayerTextDrawSetSelectable(playerid,PhoneGUI[playerid][16], 0);
+
+	PhoneGUI[playerid][17] = CreatePlayerTextDraw(playerid,580.000000, 368.000000, "abc");
+	PlayerTextDrawBackgroundColor(playerid,PhoneGUI[playerid][17], 255);
+	PlayerTextDrawFont(playerid,PhoneGUI[playerid][17], 1);
+	PlayerTextDrawLetterSize(playerid,PhoneGUI[playerid][17], 0.189999, 0.799998);
+	PlayerTextDrawColor(playerid,PhoneGUI[playerid][17], -1);
+	PlayerTextDrawSetOutline(playerid,PhoneGUI[playerid][17], 0);
+	PlayerTextDrawSetProportional(playerid,PhoneGUI[playerid][17], 1);
+	PlayerTextDrawSetShadow(playerid,PhoneGUI[playerid][17], 1);
+	PlayerTextDrawSetSelectable(playerid,PhoneGUI[playerid][17], 0);
+
+	PhoneGUI[playerid][18] = CreatePlayerTextDraw(playerid,580.000000, 383.000000, "jkl");
+	PlayerTextDrawBackgroundColor(playerid,PhoneGUI[playerid][18], 255);
+	PlayerTextDrawFont(playerid,PhoneGUI[playerid][18], 1);
+	PlayerTextDrawLetterSize(playerid,PhoneGUI[playerid][18], 0.189999, 0.799998);
+	PlayerTextDrawColor(playerid,PhoneGUI[playerid][18], -1);
+	PlayerTextDrawSetOutline(playerid,PhoneGUI[playerid][18], 0);
+	PlayerTextDrawSetProportional(playerid,PhoneGUI[playerid][18], 1);
+	PlayerTextDrawSetShadow(playerid,PhoneGUI[playerid][18], 1);
+	PlayerTextDrawSetSelectable(playerid,PhoneGUI[playerid][18], 0);
+
+	PhoneGUI[playerid][19] = CreatePlayerTextDraw(playerid,579.000000, 398.000000, "tuv");
+	PlayerTextDrawBackgroundColor(playerid,PhoneGUI[playerid][19], 255);
+	PlayerTextDrawFont(playerid,PhoneGUI[playerid][19], 1);
+	PlayerTextDrawLetterSize(playerid,PhoneGUI[playerid][19], 0.200000, 0.799998);
+	PlayerTextDrawColor(playerid,PhoneGUI[playerid][19], -1);
+	PlayerTextDrawSetOutline(playerid,PhoneGUI[playerid][19], 0);
+	PlayerTextDrawSetProportional(playerid,PhoneGUI[playerid][19], 1);
+	PlayerTextDrawSetShadow(playerid,PhoneGUI[playerid][19], 1);
+	PlayerTextDrawSetSelectable(playerid,PhoneGUI[playerid][19], 0);
+
+	PhoneGUI[playerid][20] = CreatePlayerTextDraw(playerid,605.000000, 370.000000, "3");
+	PlayerTextDrawAlignment(playerid,PhoneGUI[playerid][20], 3);
+	PlayerTextDrawBackgroundColor(playerid,PhoneGUI[playerid][20], 255);
+	PlayerTextDrawFont(playerid,PhoneGUI[playerid][20], 1);
+	PlayerTextDrawLetterSize(playerid,PhoneGUI[playerid][20], 0.379999, 1.200000);
+	PlayerTextDrawColor(playerid,PhoneGUI[playerid][20], -1);
+	PlayerTextDrawSetOutline(playerid,PhoneGUI[playerid][20], 0);
+	PlayerTextDrawSetProportional(playerid,PhoneGUI[playerid][20], 1);
+	PlayerTextDrawSetShadow(playerid,PhoneGUI[playerid][20], 1);
+	PlayerTextDrawSetSelectable(playerid,PhoneGUI[playerid][20], 0);
+
+	PhoneGUI[playerid][21] = CreatePlayerTextDraw(playerid,605.000000, 386.000000, "6");
+	PlayerTextDrawAlignment(playerid,PhoneGUI[playerid][21], 3);
+	PlayerTextDrawBackgroundColor(playerid,PhoneGUI[playerid][21], 255);
+	PlayerTextDrawFont(playerid,PhoneGUI[playerid][21], 1);
+	PlayerTextDrawLetterSize(playerid,PhoneGUI[playerid][21], 0.379999, 1.200000);
+	PlayerTextDrawColor(playerid,PhoneGUI[playerid][21], -1);
+	PlayerTextDrawSetOutline(playerid,PhoneGUI[playerid][21], 0);
+	PlayerTextDrawSetProportional(playerid,PhoneGUI[playerid][21], 1);
+	PlayerTextDrawSetShadow(playerid,PhoneGUI[playerid][21], 1);
+	PlayerTextDrawSetSelectable(playerid,PhoneGUI[playerid][21], 0);
+
+	PhoneGUI[playerid][22] = CreatePlayerTextDraw(playerid,605.000000, 400.000000, "9");
+	PlayerTextDrawAlignment(playerid,PhoneGUI[playerid][22], 3);
+	PlayerTextDrawBackgroundColor(playerid,PhoneGUI[playerid][22], 255);
+	PlayerTextDrawFont(playerid,PhoneGUI[playerid][22], 1);
+	PlayerTextDrawLetterSize(playerid,PhoneGUI[playerid][22], 0.379999, 1.200000);
+	PlayerTextDrawColor(playerid,PhoneGUI[playerid][22], -1);
+	PlayerTextDrawSetOutline(playerid,PhoneGUI[playerid][22], 0);
+	PlayerTextDrawSetProportional(playerid,PhoneGUI[playerid][22], 1);
+	PlayerTextDrawSetShadow(playerid,PhoneGUI[playerid][22], 1);
+	PlayerTextDrawSetSelectable(playerid,PhoneGUI[playerid][22], 0);
+
+	PhoneGUI[playerid][23] = CreatePlayerTextDraw(playerid,604.000000, 375.000000, "der");
+	PlayerTextDrawBackgroundColor(playerid,PhoneGUI[playerid][23], 255);
+	PlayerTextDrawFont(playerid,PhoneGUI[playerid][23], 1);
+	PlayerTextDrawLetterSize(playerid,PhoneGUI[playerid][23], 0.189999, 0.799998);
+	PlayerTextDrawColor(playerid,PhoneGUI[playerid][23], -1);
+	PlayerTextDrawSetOutline(playerid,PhoneGUI[playerid][23], 0);
+	PlayerTextDrawSetProportional(playerid,PhoneGUI[playerid][23], 1);
+	PlayerTextDrawSetShadow(playerid,PhoneGUI[playerid][23], 1);
+	PlayerTextDrawSetSelectable(playerid,PhoneGUI[playerid][23], 0);
+
+	PhoneGUI[playerid][24] = CreatePlayerTextDraw(playerid,604.000000, 391.000000, "mno");
+	PlayerTextDrawBackgroundColor(playerid,PhoneGUI[playerid][24], 255);
+	PlayerTextDrawFont(playerid,PhoneGUI[playerid][24], 1);
+	PlayerTextDrawLetterSize(playerid,PhoneGUI[playerid][24], 0.189999, 0.799998);
+	PlayerTextDrawColor(playerid,PhoneGUI[playerid][24], -1);
+	PlayerTextDrawSetOutline(playerid,PhoneGUI[playerid][24], 0);
+	PlayerTextDrawSetProportional(playerid,PhoneGUI[playerid][24], 1);
+	PlayerTextDrawSetShadow(playerid,PhoneGUI[playerid][24], 1);
+	PlayerTextDrawSetSelectable(playerid,PhoneGUI[playerid][24], 0);
+
+	PhoneGUI[playerid][25] = CreatePlayerTextDraw(playerid,604.000000, 404.000000, "wxyz");
+	PlayerTextDrawBackgroundColor(playerid,PhoneGUI[playerid][25], 255);
+	PlayerTextDrawFont(playerid,PhoneGUI[playerid][25], 1);
+	PlayerTextDrawLetterSize(playerid,PhoneGUI[playerid][25], 0.189999, 0.799998);
+	PlayerTextDrawColor(playerid,PhoneGUI[playerid][25], -1);
+	PlayerTextDrawSetOutline(playerid,PhoneGUI[playerid][25], 0);
+	PlayerTextDrawSetProportional(playerid,PhoneGUI[playerid][25], 1);
+	PlayerTextDrawSetShadow(playerid,PhoneGUI[playerid][25], 1);
+	PlayerTextDrawSetSelectable(playerid,PhoneGUI[playerid][25], 0);
+
+	PhoneGUI[playerid][26] = CreatePlayerTextDraw(playerid,624.000000, 247.000000, "_");
+	PlayerTextDrawBackgroundColor(playerid,PhoneGUI[playerid][26], 255);
+	PlayerTextDrawFont(playerid,PhoneGUI[playerid][26], 1);
+	PlayerTextDrawLetterSize(playerid,PhoneGUI[playerid][26], 0.500000, 0.599999);
+	PlayerTextDrawColor(playerid,PhoneGUI[playerid][26], -1);
+	PlayerTextDrawSetOutline(playerid,PhoneGUI[playerid][26], 0);
+	PlayerTextDrawSetProportional(playerid,PhoneGUI[playerid][26], 1);
+	PlayerTextDrawSetShadow(playerid,PhoneGUI[playerid][26], 1);
+	PlayerTextDrawUseBox(playerid,PhoneGUI[playerid][26], 1);
+	PlayerTextDrawBoxColor(playerid,PhoneGUI[playerid][26], 102);
+	PlayerTextDrawTextSize(playerid,PhoneGUI[playerid][26], 540.000000, 0.000000);
+	PlayerTextDrawSetSelectable(playerid,PhoneGUI[playerid][26], 0);
+
+	PhoneGUI[playerid][27] = CreatePlayerTextDraw(playerid,550.000000, 349.000000, "Press ~h~~g~Y ~w~to unlock.");
+	PlayerTextDrawBackgroundColor(playerid,PhoneGUI[playerid][27], 255);
+	PlayerTextDrawFont(playerid,PhoneGUI[playerid][27], 1);
+	PlayerTextDrawLetterSize(playerid,PhoneGUI[playerid][27], 0.200000, 1.000000);
+	PlayerTextDrawColor(playerid,PhoneGUI[playerid][27], -1);
+	PlayerTextDrawSetOutline(playerid,PhoneGUI[playerid][27], 1);
+	PlayerTextDrawSetProportional(playerid,PhoneGUI[playerid][27], 1);
+	PlayerTextDrawSetSelectable(playerid,PhoneGUI[playerid][27], 0);
+
+	PhoneGUI[playerid][28] = CreatePlayerTextDraw(playerid,624.000000, 350.000000, "_");
+	PlayerTextDrawBackgroundColor(playerid,PhoneGUI[playerid][28], 255);
+	PlayerTextDrawFont(playerid,PhoneGUI[playerid][28], 1);
+	PlayerTextDrawLetterSize(playerid,PhoneGUI[playerid][28], 0.500000, 0.799998);
+	PlayerTextDrawColor(playerid,PhoneGUI[playerid][28], -1);
+	PlayerTextDrawSetOutline(playerid,PhoneGUI[playerid][28], 0);
+	PlayerTextDrawSetProportional(playerid,PhoneGUI[playerid][28], 1);
+	PlayerTextDrawSetShadow(playerid,PhoneGUI[playerid][28], 1);
+	PlayerTextDrawUseBox(playerid,PhoneGUI[playerid][28], 1);
+	PlayerTextDrawBoxColor(playerid,PhoneGUI[playerid][28], 102);
+	PlayerTextDrawTextSize(playerid,PhoneGUI[playerid][28], 540.000000, 0.000000);
+	PlayerTextDrawSetSelectable(playerid,PhoneGUI[playerid][28], 0);
+
+	PhoneGUI[playerid][29] = CreatePlayerTextDraw(playerid,553.000000, 268.000000, "19:24");
+	PlayerTextDrawBackgroundColor(playerid,PhoneGUI[playerid][29], 255);
+	PlayerTextDrawFont(playerid,PhoneGUI[playerid][29], 2);
+	PlayerTextDrawLetterSize(playerid,PhoneGUI[playerid][29], 0.500000, 3.000000);
+	PlayerTextDrawColor(playerid,PhoneGUI[playerid][29], -1);
+	PlayerTextDrawSetOutline(playerid,PhoneGUI[playerid][29], 1);
+	PlayerTextDrawSetProportional(playerid,PhoneGUI[playerid][29], 1);
+	PlayerTextDrawSetSelectable(playerid,PhoneGUI[playerid][29], 0);
+
+	PhoneGUI[playerid][30] = CreatePlayerTextDraw(playerid,622.000000, 249.000000, "_");
+	PlayerTextDrawBackgroundColor(playerid,PhoneGUI[playerid][30], 255);
+	PlayerTextDrawFont(playerid,PhoneGUI[playerid][30], 1);
+	PlayerTextDrawLetterSize(playerid,PhoneGUI[playerid][30], 0.500000, 0.199998);
+	PlayerTextDrawColor(playerid,PhoneGUI[playerid][30], -1);
+	PlayerTextDrawSetOutline(playerid,PhoneGUI[playerid][30], 0);
+	PlayerTextDrawSetProportional(playerid,PhoneGUI[playerid][30], 1);
+	PlayerTextDrawSetShadow(playerid,PhoneGUI[playerid][30], 1);
+	PlayerTextDrawUseBox(playerid,PhoneGUI[playerid][30], 1);
+	PlayerTextDrawBoxColor(playerid,PhoneGUI[playerid][30], -1);
+	PlayerTextDrawTextSize(playerid,PhoneGUI[playerid][30], 617.000000, -1.000000);
+	PlayerTextDrawSetSelectable(playerid,PhoneGUI[playerid][30], 0);
+
+	PhoneGUI[playerid][31] = CreatePlayerTextDraw(playerid,547.000000, 276.000000, "Error:404 ~n~Page not found!");
+	PlayerTextDrawBackgroundColor(playerid,PhoneGUI[playerid][31], 255);
+	PlayerTextDrawFont(playerid,PhoneGUI[playerid][31], 2);
+	PlayerTextDrawLetterSize(playerid,PhoneGUI[playerid][31], 0.189998, 1.100000);
+	PlayerTextDrawColor(playerid,PhoneGUI[playerid][31], -1);
+	PlayerTextDrawSetOutline(playerid,PhoneGUI[playerid][31], 1);
+	PlayerTextDrawSetProportional(playerid,PhoneGUI[playerid][31], 1);
+	PlayerTextDrawSetSelectable(playerid,PhoneGUI[playerid][31], 0);
+
+	PhoneGUI[playerid][32] = CreatePlayerTextDraw(playerid,616.000000, 250.000000, "_");
+	PlayerTextDrawBackgroundColor(playerid,PhoneGUI[playerid][32], 255);
+	PlayerTextDrawFont(playerid,PhoneGUI[playerid][32], 1);
+	PlayerTextDrawLetterSize(playerid,PhoneGUI[playerid][32], 0.500000, 0.099998);
+	PlayerTextDrawColor(playerid,PhoneGUI[playerid][32], -1);
+	PlayerTextDrawSetOutline(playerid,PhoneGUI[playerid][32], 0);
+	PlayerTextDrawSetProportional(playerid,PhoneGUI[playerid][32], 1);
+	PlayerTextDrawSetShadow(playerid,PhoneGUI[playerid][32], 1);
+	PlayerTextDrawUseBox(playerid,PhoneGUI[playerid][32], 1);
+	PlayerTextDrawBoxColor(playerid,PhoneGUI[playerid][32], -1);
+	PlayerTextDrawTextSize(playerid,PhoneGUI[playerid][32], 616.000000, -1.000000);
+	PlayerTextDrawSetSelectable(playerid,PhoneGUI[playerid][32], 0);
+
+	PhoneGUI[playerid][33] = CreatePlayerTextDraw(playerid,545.000000, 249.000000, "_");
+	PlayerTextDrawBackgroundColor(playerid,PhoneGUI[playerid][33], 255);
+	PlayerTextDrawFont(playerid,PhoneGUI[playerid][33], 1);
+	PlayerTextDrawLetterSize(playerid,PhoneGUI[playerid][33], 0.500000, 0.199998);
+	PlayerTextDrawColor(playerid,PhoneGUI[playerid][33], -1);
+	PlayerTextDrawSetOutline(playerid,PhoneGUI[playerid][33], 0);
+	PlayerTextDrawSetProportional(playerid,PhoneGUI[playerid][33], 1);
+	PlayerTextDrawSetShadow(playerid,PhoneGUI[playerid][33], 1);
+	PlayerTextDrawUseBox(playerid,PhoneGUI[playerid][33], 1);
+	PlayerTextDrawBoxColor(playerid,PhoneGUI[playerid][33], 102);
+	PlayerTextDrawTextSize(playerid,PhoneGUI[playerid][33], 554.000000, -1.000000);
+	PlayerTextDrawSetSelectable(playerid,PhoneGUI[playerid][33], 0);
+
+	PhoneGUI[playerid][34] = CreatePlayerTextDraw(playerid,545.000000, 249.000000, "_");
+	PlayerTextDrawBackgroundColor(playerid,PhoneGUI[playerid][34], 255);
+	PlayerTextDrawFont(playerid,PhoneGUI[playerid][34], 1);
+	PlayerTextDrawLetterSize(playerid,PhoneGUI[playerid][34], 0.500000, 0.199998);
+	PlayerTextDrawColor(playerid,PhoneGUI[playerid][34], -1);
+	PlayerTextDrawSetOutline(playerid,PhoneGUI[playerid][34], 0);
+	PlayerTextDrawSetProportional(playerid,PhoneGUI[playerid][34], 1);
+	PlayerTextDrawSetShadow(playerid,PhoneGUI[playerid][34], 1);
+	PlayerTextDrawUseBox(playerid,PhoneGUI[playerid][34], 1);
+	PlayerTextDrawBoxColor(playerid,PhoneGUI[playerid][34], -1);
+	PlayerTextDrawTextSize(playerid,PhoneGUI[playerid][34], 548.000000, -1.000000);
+	PlayerTextDrawSetSelectable(playerid,PhoneGUI[playerid][34], 0);
+
+	PhoneGUI[playerid][35] = CreatePlayerTextDraw(playerid,544.000000, 349.000000, "~h~~g~Select");
+	PlayerTextDrawBackgroundColor(playerid,PhoneGUI[playerid][35], 255);
+	PlayerTextDrawFont(playerid,PhoneGUI[playerid][35], 1);
+	PlayerTextDrawLetterSize(playerid,PhoneGUI[playerid][35], 0.200000, 1.000000);
+	PlayerTextDrawColor(playerid,PhoneGUI[playerid][35], -1);
+	PlayerTextDrawSetOutline(playerid,PhoneGUI[playerid][35], 1);
+	PlayerTextDrawSetProportional(playerid,PhoneGUI[playerid][35], 1);
+	PlayerTextDrawSetSelectable(playerid,PhoneGUI[playerid][35], 0);
+
+	PhoneGUI[playerid][36] = CreatePlayerTextDraw(playerid,605.000000, 349.000000, "~h~~r~Back");
+	PlayerTextDrawBackgroundColor(playerid,PhoneGUI[playerid][36], 255);
+	PlayerTextDrawFont(playerid,PhoneGUI[playerid][36], 1);
+	PlayerTextDrawLetterSize(playerid,PhoneGUI[playerid][36], 0.200000, 1.000000);
+	PlayerTextDrawColor(playerid,PhoneGUI[playerid][36], -1);
+	PlayerTextDrawSetOutline(playerid,PhoneGUI[playerid][36], 1);
+	PlayerTextDrawSetProportional(playerid,PhoneGUI[playerid][36], 1);
+	PlayerTextDrawUseBox(playerid,PhoneGUI[playerid][36], 1);
+	PlayerTextDrawBoxColor(playerid,PhoneGUI[playerid][36], 0);
+	PlayerTextDrawTextSize(playerid,PhoneGUI[playerid][36], 620.000000, 8.000000);
+	PlayerTextDrawSetSelectable(playerid,PhoneGUI[playerid][36], 1);
+
+	PhoneGUI[playerid][37] = CreatePlayerTextDraw(playerid,549.000000, 261.000000, "Call");
+	PlayerTextDrawBackgroundColor(playerid,PhoneGUI[playerid][37], 255);
+	PlayerTextDrawFont(playerid,PhoneGUI[playerid][37], 2);
+	PlayerTextDrawLetterSize(playerid,PhoneGUI[playerid][37], 0.209999, 1.100000);
+	PlayerTextDrawColor(playerid,PhoneGUI[playerid][37], -1);
+	PlayerTextDrawSetOutline(playerid,PhoneGUI[playerid][37], 1);
+	PlayerTextDrawSetProportional(playerid,PhoneGUI[playerid][37], 1);
+	PlayerTextDrawUseBox(playerid,PhoneGUI[playerid][37], 1);
+	PlayerTextDrawBoxColor(playerid,PhoneGUI[playerid][37], 0);
+	PlayerTextDrawTextSize(playerid,PhoneGUI[playerid][37], 571.000000, 10.000000);
+	PlayerTextDrawSetSelectable(playerid,PhoneGUI[playerid][37], 1);
+
+	PhoneGUI[playerid][38] = CreatePlayerTextDraw(playerid,549.000000, 274.000000, "SMS");
+	PlayerTextDrawBackgroundColor(playerid,PhoneGUI[playerid][38], 255);
+	PlayerTextDrawFont(playerid,PhoneGUI[playerid][38], 2);
+	PlayerTextDrawLetterSize(playerid,PhoneGUI[playerid][38], 0.209999, 1.100000);
+	PlayerTextDrawColor(playerid,PhoneGUI[playerid][38], -1);
+	PlayerTextDrawSetOutline(playerid,PhoneGUI[playerid][38], 1);
+	PlayerTextDrawSetProportional(playerid,PhoneGUI[playerid][38], 1);
+	PlayerTextDrawUseBox(playerid,PhoneGUI[playerid][38], 1);
+	PlayerTextDrawBoxColor(playerid,PhoneGUI[playerid][38], 0);
+	PlayerTextDrawTextSize(playerid,PhoneGUI[playerid][38], 567.000000, 10.000000);
+	PlayerTextDrawSetSelectable(playerid,PhoneGUI[playerid][38], 1);
+
+	PhoneGUI[playerid][39] = CreatePlayerTextDraw(playerid,549.000000, 291.000000, "Add Contacts");
+	PlayerTextDrawBackgroundColor(playerid,PhoneGUI[playerid][39], 255);
+	PlayerTextDrawFont(playerid,PhoneGUI[playerid][39], 2);
+	PlayerTextDrawLetterSize(playerid,PhoneGUI[playerid][39], 0.209999, 1.100000);
+	PlayerTextDrawColor(playerid,PhoneGUI[playerid][39], -1);
+	PlayerTextDrawSetOutline(playerid,PhoneGUI[playerid][39], 1);
+	PlayerTextDrawSetProportional(playerid,PhoneGUI[playerid][39], 1);
+	PlayerTextDrawUseBox(playerid,PhoneGUI[playerid][39], 1);
+	PlayerTextDrawBoxColor(playerid,PhoneGUI[playerid][39], 0);
+	PlayerTextDrawTextSize(playerid,PhoneGUI[playerid][39], 617.000000, 10.000000);
+	PlayerTextDrawSetSelectable(playerid,PhoneGUI[playerid][39], 1);
+
+	PhoneGUI[playerid][40] = CreatePlayerTextDraw(playerid,549.000000, 304.000000, "List Contacts");
+	PlayerTextDrawBackgroundColor(playerid,PhoneGUI[playerid][40], 255);
+	PlayerTextDrawFont(playerid,PhoneGUI[playerid][40], 2);
+	PlayerTextDrawLetterSize(playerid,PhoneGUI[playerid][40], 0.209999, 1.100000);
+	PlayerTextDrawColor(playerid,PhoneGUI[playerid][40], -1);
+	PlayerTextDrawSetOutline(playerid,PhoneGUI[playerid][40], 1);
+	PlayerTextDrawSetProportional(playerid,PhoneGUI[playerid][40], 1);
+	PlayerTextDrawUseBox(playerid,PhoneGUI[playerid][40], 1);
+	PlayerTextDrawBoxColor(playerid,PhoneGUI[playerid][40], 0);
+	PlayerTextDrawTextSize(playerid,PhoneGUI[playerid][40], 617.000000, 10.000000);
+	PlayerTextDrawSetSelectable(playerid,PhoneGUI[playerid][40], 1);
+
+	PhoneGUI[playerid][41] = CreatePlayerTextDraw(playerid,549.000000, 319.000000, "Camera");
+	PlayerTextDrawBackgroundColor(playerid,PhoneGUI[playerid][41], 255);
+	PlayerTextDrawFont(playerid,PhoneGUI[playerid][41], 2);
+	PlayerTextDrawLetterSize(playerid,PhoneGUI[playerid][41], 0.209999, 1.100000);
+	PlayerTextDrawColor(playerid,PhoneGUI[playerid][41], -1);
+	PlayerTextDrawSetOutline(playerid,PhoneGUI[playerid][41], 1);
+	PlayerTextDrawSetProportional(playerid,PhoneGUI[playerid][41], 1);
+	PlayerTextDrawUseBox(playerid,PhoneGUI[playerid][41], 1);
+	PlayerTextDrawBoxColor(playerid,PhoneGUI[playerid][41], 0);
+	PlayerTextDrawTextSize(playerid,PhoneGUI[playerid][41], 585.000000, 10.000000);
+	PlayerTextDrawSetSelectable(playerid,PhoneGUI[playerid][41], 1);
+
+	PhoneGUI[playerid][42] = CreatePlayerTextDraw(playerid,549.000000, 333.000000, "Internet");
+	PlayerTextDrawBackgroundColor(playerid,PhoneGUI[playerid][42], 255);
+	PlayerTextDrawFont(playerid,PhoneGUI[playerid][42], 2);
+	PlayerTextDrawLetterSize(playerid,PhoneGUI[playerid][42], 0.209999, 1.100000);
+	PlayerTextDrawColor(playerid,PhoneGUI[playerid][42], -1);
+	PlayerTextDrawSetOutline(playerid,PhoneGUI[playerid][42], 1);
+	PlayerTextDrawSetProportional(playerid,PhoneGUI[playerid][42], 1);
+	PlayerTextDrawUseBox(playerid,PhoneGUI[playerid][42], 1);
+	PlayerTextDrawBoxColor(playerid,PhoneGUI[playerid][42], 0);
+	PlayerTextDrawTextSize(playerid,PhoneGUI[playerid][42], 592.000000, 10.000000);
+	PlayerTextDrawSetSelectable(playerid,PhoneGUI[playerid][42], 1);
+
+	PhoneGUI[playerid][43] = CreatePlayerTextDraw(playerid,553.000000, 291.000000, "Roleplay");
+	PlayerTextDrawBackgroundColor(playerid,PhoneGUI[playerid][43], 255);
+	PlayerTextDrawFont(playerid,PhoneGUI[playerid][43], 2);
+	PlayerTextDrawLetterSize(playerid,PhoneGUI[playerid][43], 0.259999, 1.399999);
+	PlayerTextDrawColor(playerid,PhoneGUI[playerid][43], -1);
+	PlayerTextDrawSetOutline(playerid,PhoneGUI[playerid][43], 1);
+	PlayerTextDrawSetProportional(playerid,PhoneGUI[playerid][43], 1);
+	PlayerTextDrawSetSelectable(playerid,PhoneGUI[playerid][43], 0);
+	return 1;
+}
+
+stock ShowPlayerPhone(playerid)
+{
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][0]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][1]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][2]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][3]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][4]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][5]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][6]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][7]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][8]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][9]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][10]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][11]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][12]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][13]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][14]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][15]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][16]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][17]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][18]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][19]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][20]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][21]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][22]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][23]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][24]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][25]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][26]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][27]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][28]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][29]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][30]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][32]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][33]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][34]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][43]);
+	return 1;
+}
+
+stock HidePlayerPhone(playerid)
+{
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][0]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][1]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][2]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][3]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][4]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][5]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][6]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][7]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][8]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][9]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][10]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][11]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][12]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][13]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][14]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][15]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][16]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][17]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][18]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][19]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][20]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][21]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][22]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][23]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][24]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][25]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][26]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][27]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][28]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][29]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][31]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][30]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][32]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][33]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][34]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][43]);
+	return 1;
+}
+
+stock ShowPlayerPhoneMenu(playerid)
+{
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][43]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][29]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][27]);
+
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][0]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][1]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][2]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][3]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][4]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][5]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][6]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][7]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][8]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][9]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][10]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][11]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][12]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][13]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][14]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][15]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][16]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][17]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][18]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][19]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][20]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][21]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][22]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][23]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][24]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][25]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][26]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][28]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][30]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][32]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][33]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][34]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][35]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][36]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][37]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][38]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][39]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][40]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][41]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][42]);
+	return 1;
+}
+
+stock HidePlayerPhoneMenu(playerid)
+{
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][35]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][36]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][37]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][38]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][39]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][40]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][41]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][42]);
+
+
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][0]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][1]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][2]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][3]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][4]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][5]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][6]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][7]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][8]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][9]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][10]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][11]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][12]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][13]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][14]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][15]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][16]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][17]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][18]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][19]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][20]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][21]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][22]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][23]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][24]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][25]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][26]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][27]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][28]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][29]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][30]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][32]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][33]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][34]);
+	PlayerTextDrawShow(playerid, PhoneGUI[playerid][43]);
+	return 1;
+}
+
+stock HideWholePhone(playerid)
+{
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][35]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][36]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][37]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][38]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][39]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][40]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][41]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][42]);
+
+
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][0]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][1]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][2]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][3]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][4]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][5]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][6]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][7]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][8]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][9]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][10]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][11]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][12]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][13]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][14]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][15]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][16]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][17]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][18]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][19]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][20]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][21]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][22]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][23]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][24]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][25]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][26]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][27]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][28]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][29]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][30]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][32]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][33]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][34]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][43]);
+	PlayerTextDrawHide(playerid, PhoneGUI[playerid][31]);
+	return 1;
+}
+//============================================================
+//--->>> Commands
+//============================================================
+CMD:phone(playerid, params[])
+{
+	if(PhoneShow[playerid] == false)
+	{
+		ShowPlayerPhone(playerid);
+		PhoneShow[playerid] = true;
+		PhoneLocked[playerid] = 1;
+		SendClientMessage(playerid, -1, "DEBUG: Phone is showed up!");
+		TogglePlayerControllable(playerid, 0);
+	}
+	else 
+	{
+		HideWholePhone(playerid);
+		PhoneShow[playerid] = false;
+		PhoneLocked[playerid] = 0;
+		SendClientMessage(playerid, -1, "DEBUG: Phone is hidden!");
+		TogglePlayerControllable(playerid, 1);
+		CancelSelectTextDraw(playerid);
+	}
+	return 1;
+}
+
+CMD:sc(playerid, params[])
+{
+	SelectTextDraw(playerid, 0xFFD900FF);
+	return 1;
+}

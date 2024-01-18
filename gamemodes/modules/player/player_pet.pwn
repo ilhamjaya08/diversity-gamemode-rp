@@ -1,0 +1,5 @@
+#include "pet/core.pwn"
+#include "pet/function.pwn"
+#include "pet/callback.pwn"
+#include "pet/timer.pwn"
+#include "pet/cmd.pwn"

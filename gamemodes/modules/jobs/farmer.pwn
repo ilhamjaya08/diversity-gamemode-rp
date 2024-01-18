@@ -1,0 +1,6 @@
+#include "farmer/core.pwn"
+#include "farmer/callback.pwn"
+#include "farmer/func.pwn"
+#include "farmer/cmd.pwn"
+#include "farmer/dialog.pwn"
+#include "farmer/timer.pwn"
