@@ -36,10 +36,10 @@ server_log.txt
 crashinfo.txt
 
 # Plugin stuffs, like static library
-*.so*
+
 
 # Crashdump file
-core
+
 
 # Environment file
 .env
@@ -73,4 +73,3 @@ discord_bot/log_collector/dist/
 discord_bot/log_collector/node_modules/
 
 # Konfigurasi MySQL
-mysql.ini
