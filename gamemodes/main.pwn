@@ -22462,7 +22462,7 @@ CMD:editentrance(playerid, params[])
 
             return 1;
         }
-        if(typeint < 0 || typeint > 11)
+        if(typeint < 0 || typeint > 12)
             return SendErrorMessage(playerid, "The specified type must be between 0 and 11.");
 
         if(EntranceData[id][entranceType] == 3 && typeint != 3) {
@@ -22942,7 +22942,7 @@ CMD:editjob(playerid, params[])
             SendClientMessageEx(playerid, X11_YELLOW_2,"TYPES: "WHITE"5: Miner | 6: Food Vendor | 7: Package sorter | 8: Arms Dealer | 9: Lumberjack.");
             return 1;
         }
-        if(typeint < 1 || typeint > 11)
+        if(typeint < 1 || typeint > 12)
             return SendErrorMessage(playerid, "Invalid type specified. Types range from 1 to 11.");
 
         JobData[id][jobType] = typeint;
